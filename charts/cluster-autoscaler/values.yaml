@@ -47,13 +47,13 @@ autoDiscovery:
 #   instanceType: CPX21<br />
 #   region: FSN1
 # </pre>
-autoscalingGroups: []
-# - name: asg1
-#   maxSize: 2
-#   minSize: 1
-# - name: asg2
-#   maxSize: 2
-#   minSize: 1
+autoscalingGroups:
+  - name: asg1
+    maxSize: 5
+    minSize: 1
+  - name: asg2
+    maxSize: 5
+    minSize: 1
 
 # autoscalingGroupsnamePrefix -- For GCE. At least one element is required if not using `autoDiscovery`. For example:
 # <pre>
@@ -111,13 +111,13 @@ azureVMType: "vmss"
 azureEnableForceDelete: false
 
 # cloudConfigPath -- Configuration file for cloud provider.
-cloudConfigPath: ""
+cloudConfigPath: "/cloudconfig/baremetal-cloud-config.yaml"
 
 # cloudProvider -- The cloud provider where the autoscaler runs.
 # Currently only `gce`, `aws`, `azure`, `magnum` and `clusterapi` are supported.
 # `aws` supported for AWS. `gce` for GCE. `azure` for Azure AKS.
 # `magnum` for OpenStack Magnum, `clusterapi` for Cluster API.
-cloudProvider: aws
+cloudProvider: externalgrpc
 
 # clusterAPICloudConfigPath -- Path to kubeconfig for connecting to Cluster API Management Cluster, only used if `clusterAPIMode=kubeconfig-kubeconfig or incluster-kubeconfig`
 clusterAPICloudConfigPath: /etc/kubernetes/mgmt-kubeconfig

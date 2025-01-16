@@ -1,0 +1,5 @@
+address: :8086
+key: ""
+cert: ""
+cacert: ""
+grpc_timeout: 5s

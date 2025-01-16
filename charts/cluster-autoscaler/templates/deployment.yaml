@@ -95,7 +95,7 @@ spec:
             - --balance-similar-node-groups
             {{- end }}
           {{- end }}
-          {{- else if eq .Values.cloudProvider "magnum" }}
+          {{- else if eq .Values.cloudProvider "externalgrpc" }}
             {{- if .Values.autoDiscovery.clusterName }}
             - --cluster-name={{ tpl (.Values.autoDiscovery.clusterName) . }}
             - --node-group-auto-discovery=magnum:role={{ tpl (join "," .Values.autoDiscovery.roles) . }}
@@ -122,7 +122,7 @@ spec:
             - --node-group-auto-discovery=label:cluster-autoscaler-enabled=true,cluster-autoscaler-name={{ tpl (.Values.autoDiscovery.clusterName) . }}
             {{- end }}
           {{- end }}
-          {{- if eq .Values.cloudProvider "magnum" }}
+          {{- if eq .Values.cloudProvider "externalgrpc" }}
             - --cloud-config={{ .Values.cloudConfigPath }}
           {{- end }}
           {{- range $key, $value := .Values.extraArgs }}
@@ -263,14 +263,13 @@ spec:
           securityContext:
             {{ toYaml .Values.containerSecurityContext | nindent 12 | trim }}
           {{- end }}
-          {{- if or (eq .Values.cloudProvider "magnum") .Values.extraVolumeSecrets .Values.extraVolumeMounts .Values.clusterAPIKubeconfigSecret }}
+          {{- if or (eq .Values.cloudProvider "externalgrpc") .Values.extraVolumeSecrets .Values.extraVolumeMounts .Values.clusterAPIKubeconfigSecret }}
           volumeMounts:
-          {{- if eq .Values.cloudProvider "magnum" }}
+          {{- if eq .Values.cloudProvider "externalgrpc" }}
             - name: cloudconfig
-              mountPath: {{ .Values.cloudConfigPath }}
-              readOnly: true
+              mountPath: /cloudconfig
           {{- end }}
-          {{- if and (eq .Values.cloudProvider "magnum") (.Values.magnumCABundlePath) }}
+          {{- if and (eq .Values.cloudProvider "externalgrpc") (.Values.magnumCABundlePath) }}
             - name: ca-bundle
               mountPath: {{ .Values.magnumCABundlePath }}
               readOnly: true
@@ -307,14 +306,14 @@ spec:
       securityContext:
         {{ toYaml .Values.securityContext | nindent 8 | trim }}
       {{- end }}
-      {{- if or (eq .Values.cloudProvider "magnum") .Values.extraVolumeSecrets .Values.extraVolumes .Values.clusterAPIKubeconfigSecret }}
+      {{- if or (eq .Values.cloudProvider "externalgrpc") .Values.extraVolumeSecrets .Values.extraVolumes .Values.clusterAPIKubeconfigSecret }}
       volumes:
-      {{- if eq .Values.cloudProvider "magnum" }}
+      {{- if eq .Values.cloudProvider "externalgrpc" }}
         - name: cloudconfig
-          hostPath:
-            path: {{ .Values.cloudConfigPath }}
+          configMap:
+            name: cloudconfig
       {{- end }}
-      {{- if and (eq .Values.cloudProvider "magnum") (.Values.magnumCABundlePath) }}
+      {{- if and (eq .Values.cloudProvider "externalgrpc") (.Values.magnumCABundlePath) }}
         - name: ca-bundle
           hostPath:
             path: {{ .Values.magnumCABundlePath }}

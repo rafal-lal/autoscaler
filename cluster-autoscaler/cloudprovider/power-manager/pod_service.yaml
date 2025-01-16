@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: grpc-power-manager-srv
+  namespace: default
+  labels:
+    app: grpc-power-manager-srv
+spec:
+  containers:
+    - name: grpc-power-manager-srv
+      image: localhost:5000/grpc-server:v0.0.2
+      imagePullPolicy: Always
+      # command: ["/main"]
+      # args: ["--v=5"]
+      command: ["/bin/bash", "-c"]
+      args: ["while true; do sleep 30; done"]
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+  restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-power-manager-srv
+  namespace: default
+  labels:
+    app: grpc-power-manager-srv
+spec:
+  selector:
+    app: grpc-power-manager-srv
+  ports:
+    - protocol: TCP
+      port: 8086
+      targetPort: 8086
+  type: ClusterIP
