@@ -51,9 +51,6 @@ autoscalingGroups:
   - name: asg1
     maxSize: 5
     minSize: 1
-  - name: asg2
-    maxSize: 5
-    minSize: 1
 
 # autoscalingGroupsnamePrefix -- For GCE. At least one element is required if not using `autoDiscovery`. For example:
 # <pre>
@@ -191,7 +188,7 @@ extraArgs:
   # scale-down-delay-after-add: 10m
   # scale-down-delay-after-delete: 0s
   # scale-down-delay-after-failure: 3m
-  # scale-down-unneeded-time: 10m
+  scale-down-unneeded-time: 10s
   # skip-nodes-with-system-pods: true
   # balancing-ignore-label_1: first-label-to-ignore
   # balancing-ignore-label_2: second-label-to-ignore

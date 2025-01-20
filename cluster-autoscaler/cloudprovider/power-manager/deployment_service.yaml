@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grpc-power-manager-srv
+  namespace: default
+  labels:
+    app: grpc-power-manager-srv
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grpc-power-manager-srv
+  template:
+    metadata:
+      labels:
+        app: grpc-power-manager-srv
+    spec:
+      containers:
+        - name: grpc-power-manager-srv
+          image: localhost:5000/grpc-server:v0.0.2
+          imagePullPolicy: Always
+          command: ["/app/main"]
+          args: ["--v=5", "--nodes=test:1:5:cluster-autoscaler-nodegroup-asg1"]
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+      restartPolicy: Always
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grpc-power-manager-srv
+  namespace: default
+  labels:
+    app: grpc-power-manager-srv
+spec:
+  selector:
+    app: grpc-power-manager-srv
+  ports:
+    - protocol: TCP
+      port: 8086
+      targetPort: 8086
+  type: ClusterIP

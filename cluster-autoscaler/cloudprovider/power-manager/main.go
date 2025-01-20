@@ -91,15 +91,15 @@ func main() {
 		s = grpc.NewServer(serverOpt)
 	}
 
-	// format is name:min:max:label,label...
-	name := strings.Split((*nodeGroupsFlag)[0], ":")[0]
+	// format is id:min:max:label,label...
+	id := strings.Split((*nodeGroupsFlag)[0], ":")[0]
 	min, _ := strconv.Atoi(strings.Split((*nodeGroupsFlag)[0], ":")[1])
 	max, _ := strconv.Atoi(strings.Split((*nodeGroupsFlag)[0], ":")[2])
 	nodeGroupLabels := strings.Split((*nodeGroupsFlag)[0], ":")[3]
 	labels := strings.Split(nodeGroupLabels, ",")
 
 	srv := server.NewBaremetalProvider(&server.BaremetalNodeGroupConfig{
-		Name:        name,
+		ID:          id,
 		MinSizeConf: min,
 		MaxSizeConf: max,
 		Labels:      labels,
