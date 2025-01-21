@@ -20,7 +20,7 @@ spec:
           image: localhost:5000/grpc-server:v0.0.2
           imagePullPolicy: Always
           command: ["/app/main"]
-          args: ["--v=5", "--nodes=test:1:5:cluster-autoscaler-nodegroup-asg1"]
+          args: ["--v=5", "--nodes=test:1:10:cluster-autoscaler-nodegroup-asg1=true,node-role.kubernetes.io/worker=worker"]
           resources:
             limits:
               cpu: 100m
@@ -29,6 +29,8 @@ spec:
               cpu: 50m
               memory: 64Mi
       restartPolicy: Always
+      nodeSelector:
+        kubernetes.io/hostname: test
 
 ---
 apiVersion: v1

@@ -67,11 +67,13 @@ func (bng *BaremetalNodeGroup) IncreaseSize(delta int) error {
 		return fmt.Errorf("NodeGroup already has maximum number of members")
 	}
 
-	newNode, err := bng.client.AddNewNode(bng.Labels)
-	if err != nil {
-		return err
+	for range delta {
+		newNode, err := bng.client.AddNewNode(bng.Labels)
+		if err != nil {
+			return err
+		}
+		bng.nodes[newNode.ID] = newNode
 	}
-	bng.nodes[newNode.IP.String()] = newNode
 
 	return nil
 }

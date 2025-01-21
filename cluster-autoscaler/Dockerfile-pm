@@ -10,7 +10,7 @@ RUN go build -o main ./cloudprovider/power-manager/
 FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y \
-    ca-certificates curl vim && \
+    ca-certificates curl vim openssh-client && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -21,6 +21,7 @@ RUN chmod +x ./kubectl && mv kubectl /usr/local/bin/
 COPY client.crt /root/
 COPY client.key /root/
 COPY ca.crt /root/
+COPY minikube-node-key /root/
 COPY minconfig /root/.kube/config
 
 ENTRYPOINT ["/app/main"]
